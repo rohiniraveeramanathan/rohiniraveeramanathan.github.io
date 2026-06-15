@@ -655,7 +655,6 @@
           <div class="case-result-pills">
             <span class="result-pill">0 → 30K followers</span>
             <span class="result-pill">4 videos × 1M+ views</span>
-            <span class="result-pill">3 years</span>
           </div>
         </div>
         <div class="case-toggle">+</div>
@@ -709,7 +708,6 @@
           <div class="case-result-pills">
             <span class="result-pill">250 → 5.8K followers</span>
             <span class="result-pill">500+ inbound leads</span>
-            <span class="result-pill">5 months</span>
           </div>
         </div>
         <div class="case-toggle">+</div>
@@ -762,7 +760,6 @@
           <div class="case-result-pills">
             <span class="result-pill">300 net new followers</span>
             <span class="result-pill">400+ link clicks</span>
-            <span class="result-pill">3 months</span>
           </div>
         </div>
         <div class="case-toggle">+</div>
@@ -854,6 +851,26 @@
   dots.forEach((dot, i) => {
     dot.addEventListener('click', () => { goTo(i); startTimer(); });
   });
+
+  // Swipe support (touch)
+  let touchStartX = 0;
+  const carouselTrack = document.querySelector('.carousel-track');
+  carouselTrack.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  carouselTrack.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) { goTo(diff > 0 ? current + 1 : current - 1); startTimer(); }
+  }, { passive: true });
+
+  // Mouse drag support (desktop)
+  let mouseStartX = 0, mouseDragging = false;
+  carouselTrack.addEventListener('mousedown', e => { mouseDragging = true; mouseStartX = e.clientX; });
+  carouselTrack.addEventListener('mouseup', e => {
+    if (!mouseDragging) return;
+    mouseDragging = false;
+    const diff = mouseStartX - e.clientX;
+    if (Math.abs(diff) > 40) { goTo(diff > 0 ? current + 1 : current - 1); startTimer(); }
+  });
+  carouselTrack.addEventListener('mouseleave', () => { mouseDragging = false; });
 
   startTimer();
 
